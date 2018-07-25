@@ -1,0 +1,64 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+input[type="submit"] {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="text"]   {
+padding: 0;
+    height: 30px;
+    position: relative;
+    left: 0;
+    outline: none;
+    border: 1px solid #cdcdcd;
+    border-color: rgba(0,0,0,.15);
+    background-color: white;
+    font-size: 16px;
+    }
+    
+    input[type="password"]   {
+padding: 0;
+    height: 30px;
+    position: relative;
+    left: 0;
+    outline: none;
+    border: 1px solid #cdcdcd;
+    border-color: rgba(0,0,0,.15);
+    background-color: white;
+    font-size: 16px;
+    }
+</style>
+<div style="text-align:center">
+<h2>Welcome to Account Management System</h2>
+<h3>Login</h3>
+
+<form action="#" th:action="@{/login}" th:object="${login}" method="post">
+	<table style="padding-left:30%">
+    	<tr>
+    		<td><label>UserName</label></td>
+    		<td><input type="text" th:field="*{userName}"/></td>
+    		
+    	</tr>
+    	<tr>
+    		<td><label>Password</label></td>
+    		<td><input type="password" th:field="*{password}"/></td>
+    		
+    	</tr>
+    	<tr>
+    	<td></td>
+    		<td><input value="Submit" type="submit"/></td>
+    	</tr>
+    </table>
+    
+    </form>
+    
+</div>
+</html>

@@ -1,0 +1,327 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button {
+	background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 16px;
+}
+input[type="text"] {
+padding: 0;
+    height: 30px;
+    position: relative;
+    left: 0;
+    outline: none;
+    border: 1px solid #cdcdcd;
+    border-color: rgba(0,0,0,.15);
+    background-color: white;
+    font-size: 16px;
+    }
+</style>
+<script th:inline="javascript">
+var message = /*[[${user.user.deskAccountIdMap}]]*/;
+console.log(message);
+var myMap = message;
+
+
+function save(e) {
+	
+
+	var selectedDesk = document.getElementById("desk").value;
+	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
+	var accountIds = myMap[selectedDesk];
+	
+	 var selectedAccountIds = [];
+	for(let accountId of accountIds) {
+		if(document.getElementsByName(accountId)[0].checked) {
+			selectedAccountIds.push(accountId);
+		}
+	}
+	document.getElementById("actionType").value = "save";
+	document.getElementById("accountIdsList").value = selectedAccountIds;
+	document.getElementsByName("user")[0].submit();
+}
+function load() {
+	document.getElementById("actionType").value = "load";
+	document.getElementsByName("user")[0].submit();
+}
+
+function deleteUser() {
+	var resp = confirm("Are you sure you want to delete?");
+	if(resp == true) {
+		document.getElementById("actionType").value = "delete";
+		document.getElementsByName("user")[0].submit();	
+	}
+	
+	
+}
+function update() {
+	alert("update");
+	var selectedDesk = document.getElementById("desk").value;
+	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
+	var accountIds = myMap[selectedDesk];
+	
+	 var selectedAccountIds = [];
+	for(let accountId of accountIds) {
+		if(document.getElementsByName(accountId)[0].checked) {
+			selectedAccountIds.push(accountId);
+		}
+	}
+	document.getElementById("accountIdsList").value = selectedAccountIds;
+	document.getElementById("actionType").value = "update";
+	document.getElementsByName("user")[0].submit();
+}
+
+function resetFields() {
+	document.getElementsByName("user.studentId")[0].value = "";	
+	document.getElementsByName("user.userName")[0].value = "";	
+	document.getElementsByName("user.email")[0].value = "";	
+	document.getElementsByName("user.department")[0].value = "";
+	document.getElementsByName("user.canWrite")[0].checked = false;
+	unSelectAll();
+}
+
+function deskChanged() {
+	var selectedDesk = document.getElementById("desk").value;
+	document.getElementById("selectedDesk").innerHTML = selectedDesk;
+	document.getElementById("accountIds").innerHTML = "";
+	if(!selectedDesk) {
+		return;
+	}
+	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
+	var accountIds = myMap[selectedDesk];
+	
+	 
+	for(let accountId of accountIds) {
+	var checkbox = document.createElement('input');
+		checkbox.type = "checkbox";
+		checkbox.name = accountId;
+		checkbox.value = accountId;
+		
+
+		var label = document.createElement('label')
+		label.appendChild(document.createTextNode(accountId));
+
+		document.getElementById("accountIds").appendChild(checkbox);
+		document.getElementById("accountIds").appendChild(label);
+		var br = document.createElement("br");
+  		document.getElementById("accountIds").appendChild(br);
+	}
+	
+	
+	
+	//alert(mapping[selectedDesk]);
+}
+
+function selectAll() {
+	
+	var selectedDesk = document.getElementById("desk").value;
+	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
+	var accountIds = myMap[selectedDesk];
+	
+	for(let accountId of accountIds) {
+		document.getElementsByName(accountId)[0].checked = true;
+	}
+}
+
+function unSelectAll() {
+	
+	var selectedDesk = document.getElementById("desk").value;
+	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
+	var accountIds = myMap[selectedDesk];
+	
+	for(let accountId of accountIds) {
+	document.getElementsByName(accountId)[0].checked = false;
+	}
+}
+
+function  loadUserComboChanged() {
+	var uid = document.getElementById("selectedUID").value;
+	
+	document.getElementById("actionType").value = "load";
+	document.getElementById("searchForm.selectedUser").value = uid;
+	document.getElementsByName("user")[0].submit();
+}
+
+function loadData() {
+	var uid = document.getElementsByName("user.studentId")[0].value;
+	
+	document.getElementById("actionType").value = "load";
+	document.getElementById("searchForm.selectedUser").value = uid;
+	document.getElementsByName("user")[0].submit();
+	
+}
+</script>
+<div style="text-align:center">
+<h2>Manage Your Accounts</h2>
+<div style="float:right"></div>
+<div style="width:100%;float:left">
+<form th:action="@{/user}" name="user1" method="post" >
+<table>
+<tr>
+<td>Enter Account ID</td>
+<td><input type="text" th:field="*{user.searchForm.accountID}" placeholder="Enter accountID here"></input></td>
+<td><input class="button" type="submit" name="Search" value="Search"></input></td>
+</tr>
+<tr>
+<td>
+Pick User
+</td>
+<td>
+
+<select style="width:197px;height:30px" id="selectedUID"  onchange="loadUserComboChanged()" th:field="*{user.searchForm.accountID}">
+                         <option th:each="user : ${user.searchForm.userList}"
+                            th:value="${user}"
+                            th:utext="${user}"/>
+                  </select>
+	        </td>
+	        </tr>
+	        <tr>
+	        
+
+</tr>
+</table>
+
+</form> 
+</div>
+<hr></hr>
+<div style="width: 90%;float:right">
+<form action="#" th:action="@{/user}" th:object="${user}" method="post" name="user" >
+<table style="width:100%">
+<tr>
+<td>
+<table style="width:300px">
+ <tr>
+      <td>Selected Desk:</td>
+      <td id="selectedDesk"></td>
+      </tr>
+      <tr >
+      <td>
+      Account IDs
+      </td>
+      	<td id="accountIds">
+      	
+      	</td>
+      	
+      </tr>
+      <tr></tr>
+      <tr></tr>
+      <tr></tr>
+</table>
+</td>
+<td>
+    <table style="padding-left:25%;width:700px">
+    <tr>
+        <td>Desk</td>
+        <td>
+        
+        <select th:field="*{user.desk}" style="width:197px;height:30px"  id="desk" onchange="deskChanged()">
+                         <option value="">--</option>
+                         <option th:each="desk : ${user.user.desks}"
+                            th:value="${desk}"
+                            th:utext="${desk}"/>
+                  </select>
+                  
+        </td>
+      </tr>
+     
+    <tr>
+        <td>Student ID</td>
+        <td><input name="user.studentId" th:field="*{user.studentId}" type="text" /></td>
+      </tr>
+      <tr>
+        <td>User Name</td>
+        <td><input name="user.userName" th:field="*{user.userName}" type="text" /></td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td><input name="user.email" th:field="*{user.email}" type="text" /></td>
+      </tr>
+      <tr>
+        <td>Department</td>
+        <td><input name="user.department" th:field="*{user.department}" type="text" /></td>
+      </tr>
+      <tr>
+        <td>Can Write</td>
+        <td><input type="checkbox" name="canWrite" th:field="*{user.canWrite}"/></td>
+      </tr>
+      
+      <tr>
+        <td></td>
+        <td><button type="button" onclick="save()">Add</button>
+        
+        
+        <button type="button" style="background-color: red;" onclick="deleteUser()">Delete</button>
+        
+        <button type="button" onclick="update()">Update</button>
+        <button type="button" style="background-color: blue;" onclick="resetFields()">Reset</button>
+        <button style="margin-top: 1%;width: 78px" type="button" onclick="loadData()">Load</button>
+        <a href="logout">Logout</a>
+        </td>
+        
+      </tr>
+    </table>
+    </td>
+    </tr>
+    </table>
+    <input type="hidden" id="actionType" name="actionType"></input>
+    <input type="hidden" id="searchForm.selectedUser" name="searchForm.selectedUser"></input>
+    <input type="hidden" id="accountIdsList" name="user.accountIds"></input>
+    <h3 style="margin-left: -20%" th:text="${user.message}"></h3>
+        
+  </form>
+  </div>
+  </div>
+  <script th:inline="javascript">
+  
+  var initialDesk = /*[[${user.user.desk}]]*/
+  
+  document.getElementById("selectedDesk").innerHTML = initialDesk;
+  var initialSelectedAccountIds = /*[[${user.user.accountIds}]]*/
+  if(initialDesk) {
+  	var accountIds = myMap[initialDesk];
+  	
+  	 
+  	for(let accountId of accountIds) {
+  		var checkbox = document.createElement('input');
+  		checkbox.type = "checkbox";
+  		checkbox.name = accountId;
+  		checkbox.value = accountId;
+  		if(initialSelectedAccountIds) {
+  			for(var acc of initialSelectedAccountIds) {
+  	  			if(accountId.trim() == acc.trim()) {
+  	  				checkbox.checked = true;
+  	  			}
+  	  		}
+  		}
+  		
+
+  		var label = document.createElement('label')
+  		label.appendChild(document.createTextNode(accountId));
+
+  		document.getElementById("accountIds").appendChild(checkbox);
+  		
+  		document.getElementById("accountIds").appendChild(label);
+  		var br = document.createElement("br");
+  		document.getElementById("accountIds").appendChild(br);
+  	}
+  }
+  </script>
+  </html>
