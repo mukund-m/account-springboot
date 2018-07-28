@@ -31,6 +31,13 @@ public class LoginController {
 		return  new ModelAndView("login", "login", new Login());
 	}
 	
+
+	@RequestMapping(value="reset", method=RequestMethod.GET)
+	public ModelAndView resetPassword(HttpServletRequest request) {
+		request.getSession().setAttribute("loggedIn", null);
+		return  new ModelAndView("reset", "reset", new Login());
+	}
+	
 	@RequestMapping(value="logout", method=RequestMethod.GET)
 	public ModelAndView logout(HttpServletRequest request) {
 		request.getSession().setAttribute("loggedIn", null);
@@ -62,6 +69,17 @@ public class LoginController {
 		} else {
 			result.rejectValue("userName", "userName.empty", "Invalid Credentials");
 			return  new ModelAndView("login", "login", new Login());
+		}
+		
+	}
+	
+	@RequestMapping(value="resetPassword", method=RequestMethod.POST)
+	public ModelAndView resetPassword(@ModelAttribute("reset") Login login, BindingResult result,
+			HttpServletRequest request) {
+		if(this.loginService.resetPassword(login)) {
+			return  new ModelAndView("login", "login", new Login());
+		} else {
+			return  new ModelAndView("reset", "reset", login);
 		}
 		
 	}

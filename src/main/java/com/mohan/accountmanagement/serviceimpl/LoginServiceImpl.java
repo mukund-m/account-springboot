@@ -43,5 +43,23 @@ public class LoginServiceImpl implements LoginService{
 		return false;
 		
 	}
+	
+	
+	public boolean resetPassword(Login login) {
+		if(!login.getConfirmPassword().equals(login.getNewPassword())) {
+			return false;
+		}
+		if(login.getConfirmPassword().isEmpty()) {
+			return false;
+		}
+		for(Login cred: this.credentials) {
+			if(cred.getUserName().equals(login.getUserName()) &&
+					cred.getPassword().equals(login.getPassword())) {
+				cred.setPassword(login.getNewPassword());
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

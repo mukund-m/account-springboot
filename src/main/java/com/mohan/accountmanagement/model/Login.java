@@ -5,6 +5,10 @@ public class Login {
 	private String userName;
 	
 	private String password;
+	
+	private String newPassword;
+	
+	private String confirmPassword;
 
 	public Login(String userName, String password) {
 		this.userName = userName;
@@ -29,6 +33,23 @@ public class Login {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
+
 	
 	
 }

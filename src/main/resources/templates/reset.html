@@ -38,9 +38,9 @@ padding: 0;
 </style>
 <div style="text-align:center">
 <h2>Welcome to Account Management System</h2>
-<h3>Login</h3>
+<h3>Reset password</h3>
 
-<form action="#" th:action="@{/login}" th:object="${login}" method="post">
+<form action="#" th:action="@{/resetPassword}" th:object="${reset}" method="post">
 	<table style="padding-left:30%">
     	<tr>
     		<td><label>UserName</label></td>
@@ -53,9 +53,19 @@ padding: 0;
     		
     	</tr>
     	<tr>
+    		<td><label>New Password</label></td>
+    		<td><input type="password" th:field="*{newPassword}"/></td>
+    		
+    	</tr>
+    	<tr>
+    		<td><label>Confirm Password</label></td>
+    		<td><input type="password" th:field="*{confirmPassword}"/></td>
+    		
+    	</tr>
+    	<tr>
     	<td></td>
-    		<td><input value="Submit" type="submit"/></td>
-    		<td><a href="reset">Reset password</a> </td>
+    		<td><input value="Reset" type="submit"/></td>
+    		
     	</tr>
     </table>
     
