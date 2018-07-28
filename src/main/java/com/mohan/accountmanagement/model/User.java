@@ -14,10 +14,10 @@ public class User {
 	String desk;
 	List<String> accountIds;
 	
+	List<String> deskAccountIds;
+	
 	private List<String> desks;
 	
-	private HashMap<String, List<String>> deskAccountIdMap;
-		
 	
 	public User() {
 		this.desks = new ArrayList<>();
@@ -25,23 +25,7 @@ public class User {
 		this.desks.add("Desk 2");
 		this.desks.add("Desk 3");
 		
-		this.deskAccountIdMap = new HashMap();
-		List<String> desk1AccountIds = new ArrayList<>();
-		desk1AccountIds.add("Account ID 1");
-		desk1AccountIds.add("Account ID 2");
-		
-		List<String> desk2AccountIds = new ArrayList<>();
-		desk2AccountIds.add("Account ID A");
-		desk2AccountIds.add("Account ID B");
-		
-		List<String> desk3AccountIds = new ArrayList<>();
-		desk3AccountIds.add("Account ID I");
-		desk3AccountIds.add("Account ID II");
-		desk3AccountIds.add("Account ID III");
-		
-		this.deskAccountIdMap.put("Desk 1", desk1AccountIds);
-		this.deskAccountIdMap.put("Desk 2", desk2AccountIds);
-		this.deskAccountIdMap.put("Desk 3", desk3AccountIds);
+	
 	}
 	
 	public String getStudentId() {
@@ -95,13 +79,15 @@ public class User {
 		this.desks = desks;
 	}
 
-	public HashMap<String, List<String>> getDeskAccountIdMap() {
-		return deskAccountIdMap;
+	public List<String> getDeskAccountIds() {
+		return deskAccountIds;
 	}
 
-	public void setDeskAccountIdMap(HashMap<String, List<String>> deskAccountIdMap) {
-		this.deskAccountIdMap = deskAccountIdMap;
+	public void setDeskAccountIds(List<String> deskAccountIds) {
+		this.deskAccountIds = deskAccountIds;
 	}
+
+	
 	
 	
 }

@@ -36,9 +36,24 @@ padding: 0;
     }
 </style>
 <script th:inline="javascript">
-var message = /*[[${user.user.deskAccountIdMap}]]*/;
+var message = /*[[${user.user.deskAccountIds}]]*/;
 console.log(message);
 var myMap = message;
+for(let accountId of myMap) {
+	var checkbox = document.createElement('input');
+		checkbox.type = "checkbox";
+		checkbox.name = accountId;
+		checkbox.value = accountId;
+		
+
+		var label = document.createElement('label')
+		label.appendChild(document.createTextNode(accountId));
+
+		document.getElementById("accountIds").appendChild(checkbox);
+		document.getElementById("accountIds").appendChild(label);
+		var br = document.createElement("br");
+  		document.getElementById("accountIds").appendChild(br);
+	}
 
 
 function save(e) {
@@ -46,7 +61,7 @@ function save(e) {
 
 	var selectedDesk = document.getElementById("desk").value;
 	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
-	var accountIds = myMap[selectedDesk];
+	var accountIds = myMap;
 	
 	 var selectedAccountIds = [];
 	for(let accountId of accountIds) {
@@ -56,6 +71,7 @@ function save(e) {
 	}
 	document.getElementById("actionType").value = "save";
 	document.getElementById("accountIdsList").value = selectedAccountIds;
+	
 	document.getElementsByName("user")[0].submit();
 }
 function load() {
@@ -76,7 +92,7 @@ function update() {
 	alert("update");
 	var selectedDesk = document.getElementById("desk").value;
 	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
-	var accountIds = myMap[selectedDesk];
+	var accountIds = myMap;
 	
 	 var selectedAccountIds = [];
 	for(let accountId of accountIds) {
@@ -99,32 +115,21 @@ function resetFields() {
 }
 
 function deskChanged() {
+	
+	
+	
 	var selectedDesk = document.getElementById("desk").value;
 	document.getElementById("selectedDesk").innerHTML = selectedDesk;
 	document.getElementById("accountIds").innerHTML = "";
 	if(!selectedDesk) {
 		return;
 	}
-	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
-	var accountIds = myMap[selectedDesk];
 	
-	 
-	for(let accountId of accountIds) {
-	var checkbox = document.createElement('input');
-		checkbox.type = "checkbox";
-		checkbox.name = accountId;
-		checkbox.value = accountId;
+	document.getElementById("actionType").value = "accoundIds";
+	document.getElementsByName("user")[0].submit();
+	
+ 
 		
-
-		var label = document.createElement('label')
-		label.appendChild(document.createTextNode(accountId));
-
-		document.getElementById("accountIds").appendChild(checkbox);
-		document.getElementById("accountIds").appendChild(label);
-		var br = document.createElement("br");
-  		document.getElementById("accountIds").appendChild(br);
-	}
-	
 	
 	
 	//alert(mapping[selectedDesk]);
@@ -134,7 +139,7 @@ function selectAll() {
 	
 	var selectedDesk = document.getElementById("desk").value;
 	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
-	var accountIds = myMap[selectedDesk];
+	var accountIds = myMap;
 	
 	for(let accountId of accountIds) {
 		document.getElementsByName(accountId)[0].checked = true;
@@ -145,7 +150,7 @@ function unSelectAll() {
 	
 	var selectedDesk = document.getElementById("desk").value;
 	//var accountIds = selectedDesk.replace(']', '').replace('[','').split(",");
-	var accountIds = myMap[selectedDesk];
+	var accountIds = myMap;
 	
 	for(let accountId of accountIds) {
 	document.getElementsByName(accountId)[0].checked = false;
@@ -221,7 +226,8 @@ Pick User
       	</td>
       	
       </tr>
-      <tr></tr>
+      <tr><td><button type="button" style="background-color: green;" onclick="selectAll()">Select All</button>
+      </td><td><button type="button" style="background-color: red;" onclick="unSelectAll()">UnSelect All</button></td></tr>
       <tr></tr>
       <tr></tr>
 </table>
@@ -284,6 +290,7 @@ Pick User
     <input type="hidden" id="actionType" name="actionType"></input>
     <input type="hidden" id="searchForm.selectedUser" name="searchForm.selectedUser"></input>
     <input type="hidden" id="accountIdsList" name="user.accountIds"></input>
+    <input type="hidden" id="deskAccountIds" name="user.deskAccountIds"></input>
     <h3 style="margin-left: -20%" th:text="${user.message}"></h3>
         
   </form>
@@ -296,7 +303,7 @@ Pick User
   document.getElementById("selectedDesk").innerHTML = initialDesk;
   var initialSelectedAccountIds = /*[[${user.user.accountIds}]]*/
   if(initialDesk) {
-  	var accountIds = myMap[initialDesk];
+  	var accountIds = myMap;
   	
   	 
   	for(let accountId of accountIds) {

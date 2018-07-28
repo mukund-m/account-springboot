@@ -1,6 +1,8 @@
 package com.mohan.accountmanagement.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,7 +50,7 @@ public class UserManagementController {
 			if(userManagement.getActionType().equals("save")) {
 				boolean isSaved = this.userManagementService.saveUserDetails(userManagement.getUser());
 				if(isSaved) {
-					
+					userManagement.getUser().setDeskAccountIds(getAccountIds(userManagement.getUser().getDesk()));
 					userManagement.setMessage("Saved Successfully");
 					return  new ModelAndView("home", "user", userManagement);
 				}
@@ -81,6 +83,7 @@ public class UserManagementController {
 				}
 				UserManagementForm userManagementForm = new UserManagementForm();
 				userManagementForm.setUser(user);
+				userManagementForm.getUser().setDeskAccountIds(getAccountIds(userManagementForm.getUser().getDesk()));
 				//userManagementForm.setDesks(this.userManagementService.loadDesks());
 				//userManagementForm.setDeskAccountIdMap(this.userManagementService.loadDeskAccountIDMap());
 				userManagementForm.setMessage("Loaded details for "+ user.getUserName());
@@ -94,6 +97,16 @@ public class UserManagementController {
 			else if(userManagement.getActionType().equals("update")) {
 				this.userManagementService.updateUserDetails(userManagement.getUser());
 				userManagement.setMessage("Updated Successfully");
+				userManagement.getUser().setDeskAccountIds(getAccountIds(userManagement.getUser().getDesk()));
+				return  new ModelAndView("home", "user", userManagement);
+			}
+			else if(userManagement.getActionType().equals("accoundIds")) {
+				if(userManagement.getUser() != null && userManagement.getUser().getDesk() != null) {
+					String desk = userManagement.getUser().getDesk() ;
+					
+					userManagement.getUser().setDeskAccountIds(getAccountIds(desk));
+				}
+
 				return  new ModelAndView("home", "user", userManagement);
 			}
 			
@@ -101,4 +114,14 @@ public class UserManagementController {
 		
 		return new ModelAndView("home", "user", new UserManagementForm());
 	}
+	
+	private List<String> getAccountIds(String desk) {
+		List<String> accountIds = new ArrayList<>();
+		if(desk.equals("Desk 1")) {
+			accountIds.add("Account Id 1");
+			accountIds.add("Account Id 2");
+		}
+		return accountIds;
+	}
+	
 }
